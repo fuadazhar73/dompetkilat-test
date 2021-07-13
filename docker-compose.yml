@@ -1,0 +1,29 @@
+version: '3.3'
+services:
+  app:
+    container_name: full_app
+    build: .
+    ports: 
+      - 4545:6060 # Forward the exposed port 4545 on the container to port 6060 on the host machine
+    restart: on-failure
+    volumes:
+      - ./api:/usr/src/app/
+    depends_on:
+       - mysql 
+    network_mode: "host" 
+
+
+
+  mysql: # mysql -h localhost -P 3306 --protocol=tcp -u root -p
+    image: mysql:5.7
+    ports: 
+      - 3306:3306
+    environment: 
+      - MYSQL_DATABASE=${DB_NAME}
+#     
+      - MYSQL_PASSWORD=${DB_PASSWORD}
+      - MYSQL_ROOT_PASSWORD=${DB_PASSWORD}
+      - DATABASE_HOST=${DB_HOST} 
+    volumes:
+      - ./database_mysql:/var/lib/mysql_dompetkilat/data
+
